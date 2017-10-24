@@ -20,4 +20,4 @@ fi
 wget https://git.io/vdjiV -O $ENVYML
 conda env create --file $ENVYML
 sleep 3
-source activate xmitgcm
+source $HOME/miniconda/bin/activate xmitgcm
