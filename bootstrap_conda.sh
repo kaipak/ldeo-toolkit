@@ -19,3 +19,4 @@ fi
 # Create xmitgcm environment
 wget https://git.io/vdjiV -O $ENVYML
 conda env create --file $ENVYML
+rm $ENVYML
