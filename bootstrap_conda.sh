@@ -16,8 +16,6 @@ else
 	echo "export PATH=$HOME/miniconda/bin:$PATH" >> $HOME/.bashrc
 fi
 
-# Create and activate environment
+# Create xmitgcm environment
 wget https://git.io/vdjiV -O $ENVYML
 conda env create --file $ENVYML
-sleep 3
-source $HOME/miniconda/bin/activate xmitgcm
