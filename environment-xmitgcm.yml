@@ -1,0 +1,12 @@
+name: xmitgcm
+dependencies:
+ - numpy
+ - scipy
+ - xarray
+ - netcdf4
+ - dask
+ - jupyter
+ - matplotlib
+ - pip:
+   - pytest
+   - xmitgcm
