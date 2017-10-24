@@ -9,11 +9,11 @@ wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O mi
 
 bash miniconda.sh -b -p ${HOME}/miniconda
 
-if [ ! -z $(grep "miniconda/bin" "$BASHRC") ]
+if grep 'miniconda\/bin' $BASHRC
 then
-	echo "miniconda seems to be in your path already so I'll leave it alone..."
+        echo "miniconda seems to be in your path already so I'll leave it alone..."
 else
-	echo "export PATH=$HOME/miniconda/bin:$PATH" >> $HOME/.bashrc
+        echo "export PATH=$HOME/miniconda/bin:$PATH" >> $HOME/.bashrc
 fi
 
 # Create xmitgcm environment
