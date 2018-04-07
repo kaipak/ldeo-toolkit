@@ -9,4 +9,6 @@ echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee 
 curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 sudo apt -y install google-cloud-sdk
 
+conda update conda
+
 export PATH=$PATH:~/ldeo-toolkit/bin:~/.local/bin/
