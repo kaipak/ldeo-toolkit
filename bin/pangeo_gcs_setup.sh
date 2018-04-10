@@ -14,5 +14,8 @@ curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 sudo apt update && sudo apt -y install google-cloud-sdk gcsfuse
 
 conda update --yes conda
+conda install --yes -c conda-forge seaborn xrft
+# Hackish way to get latest xrft
+cp /home/jovyan/dev/xrft/xrft/xrft.py /opt/conda/lib/python3.6/site-packages/xrft/xrft.py
 
 chmod 0600 ~/.ssh/id_rsa
