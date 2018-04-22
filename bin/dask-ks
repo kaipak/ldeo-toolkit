@@ -30,15 +30,15 @@ done
 
 # Clean-up
 rm -rf /home/kyp/worker-*
-pkill -u kyp dask-scheduler
-pkill -u kyp dask-worker
+pkill -u $USER dask-scheduler
+pkill -u $USER dask-worker
 
 if [[ "$cflag" = true ]]; then
     echo "Cleaning up and exitting... "
     exit 0
 fi
 
-/home/kyp/.conda/envs/kai/bin/dask-scheduler &
-/home/kyp/.conda/envs/kai/bin/dask-worker --nprocs ${nprocs} --memory-limit ${memory} tcp://129.236.21.48:8786 &
+/home/kyp/.conda/envs/kai/bin/dask-scheduler --port 8799&
+/home/kyp/.conda/envs/kai/bin/dask-worker --nprocs ${nprocs} --memory-limit ${memory} tcp://129.236.21.48:8799 &
 
 echo 'Started Dask environment'
