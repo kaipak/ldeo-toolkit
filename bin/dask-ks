@@ -1,1 +1,44 @@
 #!/bin/bash
+# Simple script to clean-up and start dask environment
+#
+
+# Handle some options
+
+cflag=false
+kflag=false
+memory=.25
+nprocs=32
+
+usage() { echo "Usage: $0 [-p <nprocs>] [-m <memory-limit>] [-c (just clean-up environment and\
+	        processes without starting.)]" 1>&2;\
+	  exit 1; }
+
+while getopts ":p:m:c" opt; do
+    case $opt in
+      c) cflag=true 
+	 ;; 
+      m) memory=${OPTARG} 
+	 ;;
+      p) nprocs=${OPTARG}
+	 ;;
+      *) echo "Invalid option: -$OPTARG" >&2 
+	 usage
+	 exit 1
+	 ;;
+    esac
+done
+
+# Clean-up
+# rm -rf /home/kyp/worker-*
+pkill -u kai dask-scheduler
+pkill -u kai dask-worker
+
+if [[ "$cflag" = true ]]; then
+    echo "Cleaning up and exitting... "
+    exit 0
+fi
+
+dask-scheduler &
+dask-worker --nprocs ${nprocs} --memory-limit ${memory} tcp://129.236.21.48:8786 &
+
+echo 'Started Dask environment'
