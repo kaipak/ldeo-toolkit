@@ -3,7 +3,6 @@
 #
 ##############################################################################
 
-cflag=false
 kflag=false
 memory=.1
 nprocs=16
@@ -12,36 +11,40 @@ usage() { echo "Usage: $0 [-p <nprocs>] [-m <memory-limit>]
 	        [-c (just clean-up environment and processes without starting.)]" 1>&2;\
 	  exit 1; }
 
-while getopts "pmch:" opt; do
-    case $opt in
-      c) cflag=true 
+while getopts ":kp:m:h" opt; do
+    case "$opt" in
+      k) kflag=true
 	 ;; 
-      h|\?)
-	 usage
+      h) usage
 	 exit 0
 	 ;;
       m) memory=${OPTARG} 
 	 ;;
       p) nprocs=${OPTARG}
 	 ;;
-      *) echo "Invalid option: -$OPTARG" >&2 
+      \?) 
+	 echo "Invalid option: -$OPTARG" >&2 
 	 usage
 	 exit 1
 	 ;;
     esac
 done
 
+shift $((OPTIND-1))
+
+[ "$1" = "--" ] && shift
+
 # Clean-up
 # rm -rf /home/kyp/worker-*
 pkill -u $USER dask-scheduler
 pkill -u $USER dask-worker
 
-if [[ "$cflag" = true ]]; then
+if [[ "$kflag" = true ]]; then
     echo "Cleaning up and exitting... "
     exit 0
 fi
 
 dask-scheduler &
-dask-worker --nprocs ${nprocs} --memory-limit ${memory} tcp://129.236.21.48:8786 &
+dask-worker --nprocs ${nprocs} --memory-limit ${memory} tcp://localhost:8786 &
 
 echo 'Started Dask environment'
