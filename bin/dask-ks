@@ -1,22 +1,25 @@
 #!/bin/bash
 # Simple script to clean-up and start dask environment
 #
-
-# Handle some options
+##############################################################################
 
 cflag=false
 kflag=false
-memory=.25
-nprocs=32
+memory=.1
+nprocs=16
 
-usage() { echo "Usage: $0 [-p <nprocs>] [-m <memory-limit>] [-c (just clean-up environment and\
-	        processes without starting.)]" 1>&2;\
+usage() { echo "Usage: $0 [-p <nprocs>] [-m <memory-limit>] 
+	        [-c (just clean-up environment and processes without starting.)]" 1>&2;\
 	  exit 1; }
 
-while getopts ":p:m:c" opt; do
+while getopts "pmch:" opt; do
     case $opt in
       c) cflag=true 
 	 ;; 
+      h|\?)
+	 usage
+	 exit 0
+	 ;;
       m) memory=${OPTARG} 
 	 ;;
       p) nprocs=${OPTARG}
@@ -30,8 +33,8 @@ done
 
 # Clean-up
 # rm -rf /home/kyp/worker-*
-pkill -u kai dask-scheduler
-pkill -u kai dask-worker
+pkill -u $USER dask-scheduler
+pkill -u $USER dask-worker
 
 if [[ "$cflag" = true ]]; then
     echo "Cleaning up and exitting... "
