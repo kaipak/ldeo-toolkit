@@ -3,12 +3,26 @@
 #
 ##############################################################################
 
+# Get number of cores available on system and set default Dask allocation of half that
+platform=`uname`
+procs_avail=1
+mem_avail=1
+
+if [[ "$platform" == 'Linux' ]]; then
+    procs_avail=`grep -c ^processor /proc/cpuinfo`
+    mem_avail=`free -g | grep Mem | awk '{ print $2}'`
+elif [[ "$platform" == 'Darwin' ]]; then
+    procs_avail=`sysctl -n hw.ncpu`
+    mem_avail=`system_profiler SPHardwareDataType | grep "  Memory:" | awk '{ print $2}'`
+fi
+
 kflag=false
-memory=.1
-nprocs=16
+memory_limit=.25
+nprocs=$((procs_avail / 2))
+mem_alloc=$(echo ${mem_avail}*${memory_limit}|bc)
 
 usage() { echo "Usage: $0 [-p <nprocs>] [-m <memory-limit>] 
-	        [-c (just clean-up environment and processes without starting.)]" 1>&2;\
+	        [-k (just clean-up environment and processes without starting.)]" 1>&2;\
 	  exit 1; }
 
 while getopts ":kp:m:h" opt; do
@@ -44,7 +58,8 @@ if [[ "$kflag" = true ]]; then
     exit 0
 fi
 
-dask-scheduler &
-dask-worker --nprocs ${nprocs} --memory-limit ${memory} tcp://localhost:8786 &
+echo "Initiating Dask environment with these options: procs: ${nprocs}, memory: ${mem_alloc} GB"
+sleep 5
 
-echo 'Started Dask environment'
+dask-scheduler &
+dask-worker --nprocs ${nprocs} --memory-limit ${memory_limit} tcp://localhost:8786 &
