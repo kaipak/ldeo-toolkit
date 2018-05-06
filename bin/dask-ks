@@ -12,9 +12,12 @@ memory_limit=.25 # follows dask option memory-limit which is percentage of syste
 if [[ "$platform" == 'Linux' ]]; then
     procs_avail=`grep -c ^processor /proc/cpuinfo`
     mem_avail=`free -g | grep Mem | awk '{ print $2}'`
+    user=$USER
 elif [[ "$platform" == 'Darwin' ]]; then
     procs_avail=`sysctl -n hw.ncpu`
     mem_avail=`system_profiler SPHardwareDataType | grep "  Memory:" | awk '{ print $2}'`
+    user=`id -u`
+
 fi
 
 kflag=false
@@ -50,8 +53,8 @@ shift $((OPTIND-1))
 
 # Clean-up
 # rm -rf /home/kyp/worker-*
-pkill -u $USER dask-scheduler
-pkill -u $USER dask-worker
+pkill -u $user -f dask-scheduler
+pkill -u $user -f dask-worker
 
 if [[ "$kflag" = true ]]; then
     echo "Cleaning up and exitting... "
