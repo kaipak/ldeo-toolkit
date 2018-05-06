@@ -6,7 +6,8 @@
 # Get number of cores available on system and set default Dask allocation of half that
 platform=`uname`
 procs_avail=1
-mem_avail=1
+mem_avail=1 # Total system memory available which will be figured out below
+memory_limit=.25 # follows dask option memory-limit which is percentage of system memory
 
 if [[ "$platform" == 'Linux' ]]; then
     procs_avail=`grep -c ^processor /proc/cpuinfo`
@@ -17,10 +18,9 @@ elif [[ "$platform" == 'Darwin' ]]; then
 fi
 
 kflag=false
-memory_limit=.25
 nprocs=$((procs_avail / 2))
-mem_alloc=$(echo ${mem_avail}*${memory_limit}|bc)
-
+mem_alloc=$(echo ${mem_avail}*${memory_limit}|bc) # how much memory will be allocated to Dask. 
+                                                  # For info purposes
 usage() { echo "Usage: $0 [-p <nprocs>] [-m <memory-limit>] 
 	        [-k (just clean-up environment and processes without starting.)]" 1>&2;\
 	  exit 1; }
@@ -32,7 +32,7 @@ while getopts ":kp:m:h" opt; do
       h) usage
 	 exit 0
 	 ;;
-      m) memory=${OPTARG} 
+      m) memory_limit=${OPTARG} 
 	 ;;
       p) nprocs=${OPTARG}
 	 ;;
