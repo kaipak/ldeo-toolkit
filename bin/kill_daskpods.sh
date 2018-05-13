@@ -28,7 +28,7 @@ shift $((OPTIND-1))
 [ "$1" = "--" ] && shift
 
 
-for pod in $(/usr/local/bin/kubectl get po --namespace pangeo -a | grep $user | grep dask | awk '{print$1}')
+for pod in $(/usr/local/bin/kubectl get po --namespace pangeo -a | grep $user | grep dask | grep Completed | awk '{print$1}')
 do
 	/usr/local/bin/kubectl delete pod $pod --namespace pangeo
 done
