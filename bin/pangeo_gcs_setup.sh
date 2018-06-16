@@ -2,6 +2,9 @@
 # Script to get GCS Jupyter pod in a state that can reliably run GCS Cloud management
 # tools and run ASV benchmarks.
 
+# Housecleaning stuff
+# Retrieve some useful packages
+chmod 0600 ~/.ssh/id_rsa
 sudo apt update && sudo apt -y install lsb-release ssh-client less
 
 export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
@@ -14,8 +17,8 @@ curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 sudo apt update && sudo apt -y install google-cloud-sdk gcsfuse
 
 conda update --yes conda
-conda install --yes -c conda-forge seaborn xrft
+conda update --yes xarray
+conda install --yes -c conda-forge xrft
 # Hackish way to get latest xrft
 cp /home/jovyan/dev/xrft/xrft/xrft.py /opt/conda/lib/python3.6/site-packages/xrft/xrft.py
 
-chmod 0600 ~/.ssh/id_rsa
