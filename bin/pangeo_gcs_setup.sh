@@ -5,7 +5,9 @@
 # Housecleaning stuff
 # Retrieve some useful packages
 chmod 0600 ~/.ssh/id_rsa
-sudo apt update && sudo apt -y install lsb-release ssh-client less
+sudo apt update 
+sudo apt -y install gnupg
+sudo apt -y install lsb-release ssh-client less
 
 export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
 echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
