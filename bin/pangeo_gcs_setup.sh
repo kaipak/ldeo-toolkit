@@ -12,11 +12,12 @@ sudo apt -y install lsb-release ssh-client less
 export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
 echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
 
+# gcsfuse mount pangeo-data
 export GCSFUSE_REPO=gcsfuse-`lsb_release -c -s`
 echo "deb http://packages.cloud.google.com/apt $GCSFUSE_REPO main" | sudo tee /etc/apt/sources.list.d/gcsfuse.list
-
 curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 sudo apt update && sudo apt -y install google-cloud-sdk gcsfuse
+/usr/bin/gcsfuse --implicit-dirs pangeo-data /gcs
 
 conda update --yes conda
 conda update --yes xarray
